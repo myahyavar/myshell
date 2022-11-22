@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define BOYUT 500
+#define SIZE 500
 
 void shell(char **x);
 
@@ -12,8 +12,8 @@ int main(void)
     {
         printf("Myshell>>");
 
-        char x[BOYUT];
-        fgets(x, BOYUT, stdin);
+        char x[SIZE];
+        fgets(x, SIZE, stdin);
 
         if (strncmp(x, "exit", 4) == 0)
         {
@@ -34,7 +34,7 @@ int main(void)
         }
         else
         {
-            char **arguments = ((char **)malloc(BOYUT * sizeof(char **)));
+            char **arguments = ((char **)malloc(SIZE * sizeof(char **)));
             x[strlen(x) - 1] = NULL; // error avoider
 
             int i = 0;
@@ -73,12 +73,12 @@ void shell(char **x)
     }
     pid_t forka;
     int v;
-    if (strncmp(x[0], "tekrar", 6) == 0)
+    if (strncmp(x[0], "execx", 5) == 0)
     {
         forka = fork();
         if (forka == 0)
         {
-            v = execve("tekrar", x, NULL);
+            v = execve("execx", x,NULL);
         }
         else
         {
@@ -115,6 +115,6 @@ void shell(char **x)
     }
     else
     {
-        printf("wrong input");
+        printf("\n Wrong input\n");
     }
 }
