@@ -1,95 +1,120 @@
-#include <stdio.h>
 #include <string.h>
+#include <stdio.h>
 #include <stdlib.h>
 
-int length(char *input[]);
-void divideSpace(char *input, char **str);
+#define BOYUT 500
 
-int main()
+void shell(char **x);
+
+int main(void)
 {
-
-    char input[100];
-    char *str[100];
-
-    int e;
-
     while (1)
     {
-        printf("myshell>>");
+        printf("Myshell>>");
 
-        fgets(input, 100, stdin);
-        char *temp;
-        for (int i = 0; i < length(input); i++)
+        char x[BOYUT];
+        fgets(x, BOYUT, stdin);
+
+        if (strncmp(x, "exit", 4) == 0)
         {
-            divideSpace(input[i], str);
-            if (strcmp(str[0], "exit") == 0)
-            {
-
-                exit(0);
-            }
-            else if (strcmp(str[0], "execx") == 0)
-            {
-
-                pid_t f = fork();
-                if (f == 0)
-                {
-                    e = execv("execx", str);
-                }
-
-                else
-                {
-                    wait(&e);
-                }
-            }
-            else if (strcmp(str[0], "ls") == 0)
-            {
-                system("/bin/ls");
-            }
-            else if (strcmp(str[0], "clear") == 0)
-            {
-                system("clear");
-            }
-            else if (strcmp(str[0], "cat") == 0)
-            {
-                // update needed
-                execv("/bin/cat");
-            }
-            else if (strcmp(input, "bash") == 0)
-            {
-                system("/bin/bash");
-            }
-            else
-            {
-                // run commmand
-            }
+            printf("\n *** Goodbye **** \n");
+            exit(0);
         }
-        if (exit)
+        else if (strncmp(x, "bash", 4) == 0)
         {
-            break;
+            system("/bin/bash");
+        }
+        else if (strncmp(x, "clear", 5) == 0)
+        {
+            system("clear");
+        }
+        else if (strncmp(x, "ls", 2) == 0)
+        {
+            system("/bin/ls");
+        }
+        else
+        {
+            char **arguments = ((char **)malloc(BOYUT * sizeof(char **)));
+            x[strlen(x) - 1] = NULL; // error avoider
+
+            int i = 0;
+            char **space = strtok(x, " ");
+            while (space != NULL)
+            {
+                arguments[i] = (char **)malloc((strlen(space)) * sizeof(char **));
+                strcpy(arguments[i], space);
+                space = strtok(NULL, " ");
+                i++;
+            }
+
+            int argumentctr = 0;
+            while (arguments[argumentctr] != NULL)
+            {
+                argumentctr++;
+            }
+            for (int i = 0; i < argumentctr; i++)
+            {
+                if (i = argumentctr - 1)
+                {
+                    shell(arguments);
+                }
+            }
         }
     }
     return 0;
 }
 
-int length(char *input[])
+void shell(char **x)
 {
-    int length = 0;
-    while (input[length] != '\0')
+    int argumentctr = 0;
+    while (x[argumentctr] != NULL)
     {
-        length++;
+        argumentctr++;
     }
-    return length;
-}
-
-void divideSpace(char *input, char **str)
-{
-
-    for (int i = 0; i < 100; i++)
+    pid_t forka;
+    int v;
+    if (strncmp(x[0], "tekrar", 6) == 0)
     {
-        str[i] = strsep(&input, " ");
-        if (str[i] == NULL)
-            break;
-        if (strlen(str[i]) == 0)
-            i--;
+        forka = fork();
+        if (forka == 0)
+        {
+            v = execve("tekrar", x, NULL);
+        }
+        else
+        {
+            wait(&v);
+        }
+    }
+    else if (strcmp(x[0], "writef") == 0)
+    {
+        forka = fork();
+        if (forka == 0)
+        {
+            v = execve("writef", x, NULL);
+        }
+        else
+        {
+            wait(&v);
+        }
+    }
+    else if (strncmp(x[0], "bash", 4) == 0)
+    {
+        system("/bin/bash");
+    }
+    else if (strncmp(x[0], "cat", 3) == 0)
+    {
+        printf("\n cat : %s \n", x[1]);
+    }
+    else if (strncmp(x[0], "clear", 5) == 0)
+    {
+        system("clear");
+    }
+    else if (strncmp(x[0], "ls", 2) == 0)
+    {
+        system("/bin/ls");
+    }
+    else
+    {
+        printf("wrong input");
     }
 }
