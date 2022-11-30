@@ -10,25 +10,25 @@ int main(void)
 {
     while (1)
     {
-        printf("Myshell>>");
+        printf("Myshell>>");//surekli basilan shell
 
         char x[SIZE];
         fgets(x, SIZE, stdin);
-
-        if (strncmp(x, "exit", 4) == 0)
+	//basit shell komutlari icin input karsilastirmasi
+        if (strncmp(x, "exit", 4) == 0)//cikis
         {
-            printf("\n *** Goodbye **** \n");
+            printf("\n **** Goodbye **** \n");
             exit(0);
         }
-        else if (strncmp(x, "bash", 4) == 0)
+        else if (strncmp(x, "bash", 4) == 0)//bash islemi
         {
             system("/bin/bash");
         }
-        else if (strncmp(x, "clear", 5) == 0)
+        else if (strncmp(x, "clear", 5) == 0)//shell temizleme
         {
             system("clear");
         }
-        else if (strncmp(x, "ls", 2) == 0)
+        else if (strncmp(x, "ls", 2) == 0)//dosya gosterimi
         {
             system("/bin/ls");
         }
@@ -38,7 +38,7 @@ int main(void)
             x[strlen(x) - 1] = NULL; // error avoider
 
             int i = 0;
-            char **space = strtok(x, " ");
+            char **space = strtok(x, " ");//argumanlari bosluk karakyterine gore ayirip baska bir arrayda tutma
             while (space != NULL)
             {
                 arguments[i] = (char **)malloc((strlen(space)) * sizeof(char **));
@@ -48,7 +48,7 @@ int main(void)
             }
 
             int argumentctr = 0;
-            while (arguments[argumentctr] != NULL)
+            while (arguments[argumentctr] != NULL)//total arguman sayisini alma
             {
                 argumentctr++;
             }
@@ -56,7 +56,7 @@ int main(void)
             {
                 if (i = argumentctr - 1)
                 {
-                    shell(arguments);
+                    shell(arguments);//karmasik islemler icin argumanlari shell metoduna yollama
                 }
             }
         }
@@ -66,55 +66,37 @@ int main(void)
 
 void shell(char **x)
 {
-    int argumentctr = 0;
-    while (x[argumentctr] != NULL)
-    {
-        argumentctr++;
-    }
     pid_t forka;
     int v;
-    if (strncmp(x[0], "execx", 5) == 0)
+    if (strncmp(x[0], "execx", 5) == 0)//tekrar fonkisyonu
     {
-        forka = fork();
+        forka = fork();//fork islemi
         if (forka == 0)
         {
-            v = execve("execx", x,NULL);
+            v = execve("execx", x,NULL);//alt program cagirma
         }
         else
         {
-            wait(&v);
+            wait(&v);//process bitene kadar bekleme
         }
     }
-    else if (strcmp(x[0], "writef") == 0)
+    else if (strcmp(x[0], "writef") == 0)//dosyaya yazma fonksiyonu
     {
-        forka = fork();
+        forka = fork();//fork islemi
         if (forka == 0)
         {
-            v = execve("writef", x, NULL);
+            v = execve("writef", x, NULL);//alt program cagirma
         }
         else
         {
-            wait(&v);
+            wait(&v);//process bitene kadar bekleme
         }
-    }
-    else if (strncmp(x[0], "bash", 4) == 0)
+    } else if (strncmp(x[0], "cat",3) == 0)//cat
     {
-        system("/bin/bash");
-    }
-    else if (strncmp(x[0], "cat", 3) == 0)
-    {
-        printf("\n cat : %s \n", x[1]);
-    }
-    else if (strncmp(x[0], "clear", 5) == 0)
-    {
-        system("clear");
-    }
-    else if (strncmp(x[0], "ls", 2) == 0)
-    {
-        system("/bin/ls");
+        printf("\n cat: %s \n",x[1]);//verilen arguman girdisini ekrana yazdirir
     }
     else
     {
-        printf("\n Wrong input\n");
+        printf("\n Wrong input, pelase try again\n");//yanlis input verildiginde
     }
 }
